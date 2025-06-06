@@ -130,10 +130,24 @@ function sendWhatsAppOrder() {
   var total = parseFloat($('.js-cart-total').text()) || 0;
   productsMessage += `Total: S/. ${total.toFixed(2)}\n\n`;
 
-  // Obtener la dirección del usuario
+  // Obtener la dirección y el método de pago seleccionados
   var userAddress = document.getElementById('address').value.trim();
+  var paymentInput = document.querySelector('input[name="payment"]:checked');
 
-  // Verificar si se ingresó una dirección
+  // Validar la dirección
+  if (!userAddress) {
+    alert('Por favor, ingresa tu ubicación.');
+    return;
+  }
+
+  // Validar método de pago
+  if (!paymentInput) {
+    alert('Selecciona un método de pago: transferencia o efectivo.');
+    return;
+  }
+
+  var paymentMethod = paymentInput.value;
+
   if (userAddress) {
     // Crear enlace de Google Maps
     var mapsLink = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(userAddress)}`;
@@ -141,7 +155,7 @@ function sendWhatsAppOrder() {
   } else {
     productsMessage += `Dirección: No proporcionada.\n\n`;
   }
-
+  productsMessage += `Método de pago: ${paymentMethod}\n\n`;
   productsMessage += "Confirmo que mi orden es correcta.";
 
   // Número de teléfono de destino (sin el símbolo +)

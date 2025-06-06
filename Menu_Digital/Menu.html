@@ -413,7 +413,17 @@
       </div>
 
 
-    </div>
+    </div>    
+ <!-- boton de tranferencia o efectivo -->
+       <div class="cart__payment">
+              <label class="cart__payment-option" for="pay-transfer">
+                <input id="pay-transfer" type="radio" name="payment" value="Transferencia"> Transferencia
+              </label>
+              <label class="cart__payment-option" for="pay-cash">
+                <input id="pay-cash" type="radio" name="payment" value="Efectivo"> Efectivo
+              </label>
+         </div>
+ <!-- boton de tranferencia o efectivo -->
     <div class="cart__footer">
       <div class="cart__footer-content">
         <p class="cart__total">
@@ -428,9 +438,8 @@
 
   <div class="lightbox js-lightbox js-toggle-cart"></div>
   <script>
-    // Seleccionar todos los enlaces del menú
-    const links = document.querySelectorAll('.w3-top a');
 
+     const links = document.querySelectorAll('.w3-top a[href^="#"]');
     // Evento de clic en los enlaces del menú para hacer un desplazamiento suave hacia la sección correspondiente
     links.forEach(link => {
       link.addEventListener('click', function (e) {
