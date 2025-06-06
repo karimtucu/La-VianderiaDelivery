@@ -568,6 +568,22 @@ body.open .lightbox {
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Sombra más intensa alrededor del contorno */
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
+/* boton de tranferencia o efectivo */
+.cart__payment {
+  display: flex;
+  justify-content: space-around;
+  margin: 10px 0;
+}
+
+.cart__payment-option {
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  color: #0d0c22;
+  cursor: pointer;
+}
+
 
 /* Para pantallas más pequeñas (móviles) */
 @media (max-width:1250px) {
