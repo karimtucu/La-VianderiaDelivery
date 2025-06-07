@@ -445,6 +445,7 @@ padding: 0 20px 0 0;
 }
 
 .cart-product {
+  line-height: 1;
   display: grid;
   grid-template-columns: 4fr 2fr 1fr;
   /* Cuatro columnas: Título, Cantidad, Precio, Eliminar */
@@ -456,8 +457,29 @@ padding: 0 20px 0 0;
 }
 
 .cart-product__title {
-  color: #FFF;
+color: #FFF;
   font-family: "AristotelicaIcons-DemiBold", sans-serif;
+
+  /* 1) Convertimos el elemento en un “flexbox” vertical de WebKit */
+  display: -webkit-box;
+
+  /* 2) Establecemos que solo queremos 2 líneas antes de cortar */
+  -webkit-line-clamp: 2;
+
+  /* 3) Indicamos que el box-orient sea vertical para line-clamp */
+  -webkit-box-orient: vertical;
+
+  /* 4) Ocultamos cualquier contenido que rebase esas dos líneas */
+  overflow: hidden;
+
+  /* 5) (Opcional) Para asegurar que aparezcan puntos si se corta */
+  text-overflow: ellipsis;
+
+  /* 6) Ajusta si quieres un ancho máximo */
+  max-width: 200px;  /* adapta a tu diseño real */
+  
+  /* 7) Control de interlineado (ayuda a que las dos líneas queden ordenadas) */
+  line-height: 1.2; /* ó el valor que encaje con tu diseño */
 }
 
 .cart-product__price {
@@ -534,7 +556,7 @@ body.open .lightbox {
   /* Color del texto */
   border-radius: 50%;
   /* Forma circular */
-  padding: 5px 12px;
+  padding: 1px 1px;
   /* Espaciado interno */
   font-size: 14px;
   /* Tamaño del texto */
@@ -569,21 +591,119 @@ body.open .lightbox {
   transition: box-shadow 0.3s ease, border-color 0.3s ease;
 }
 /* boton de tranferencia o efectivo */
+/* 1. Contenedor principal, quitamos space-around */
 .cart__payment {
+  flex-direction: column;
   display: flex;
-  justify-content: space-around;
-  margin: 10px 0;
+  gap: 10px;
+  margin: 10px 0 80px;
 }
 
+/* 2. Cada opción reparte igual espacio */
 .cart__payment-option {
+  position: relative;
+  background-color: #fff;
+  flex: 1;
   font-size: 14px;
+}
+
+/* 3. Label que ocupa TODO el área del padre y centra el texto */
+.cart__payment-option label {
   display: flex;
   align-items: center;
-  gap: 5px;
-  color: #0d0c22;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  padding: 12px 0;
+  text-align: center;
+  color: #000;
+  cursor: pointer;
+  position: relative;
+  z-index: 2;
+  transition: color 200ms ease-in;
+  overflow: hidden;
+}
+
+/* 4. Pseudo-elemento que hace el fondo naranja animado */
+.cart__payment-option label:before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #FF8C00;
+  transform: translate(-50%, -50%) scale3d(1, 1, 1);
+  transition: all 300ms cubic-bezier(0.4, 0.0, 0.2, 1);
+  opacity: 0;
+  z-index: -1;
+}
+
+/* 5. Pseudo-elemento del círculo “check” a la derecha */
+.cart__payment-option label:after {
+  content: '';
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  /*border: 2px solid #D1D7DC;*/
+  background-color: #fff;
+  background-image: url("data:image/svg+xml,%3Csvg width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M5.414 11L4 12.414l5.414 5.414L20.828 6.414 19.414 5l-10 10z' fill='%23fff' fill-rule='nonzero'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: 2px 3px;
+  border-radius: 50%;
+  transition: all 200ms ease-in;
+  z-index: 2;
+}
+
+/* 6. Cuando el input está checkeado, teñimos texto y background */
+.cart__payment-option input:checked ~ label {
+  color: #fff;
+}
+
+.cart__payment-option input:checked ~ label:before {
+  transform: translate(-50%, -50%) scale3d(56, 56, 1);
+  opacity: 1;
+}
+
+.cart__payment-option input:checked ~ label:after {
+  background-color: #FF8C00;
+  border-color: #FF8C00;
+}
+
+/* 7. Ocultamos el input (solo nos interesa el label) */
+.cart__payment-option input {
+  visibility: hidden;
+  width: 32px;
+  height: 32px;
+  position: absolute;
+  right: 20px;
+  top: 50%;
+  transform: translateY(-50%);
   cursor: pointer;
 }
 
+/* 8. Media query para pantallas pequeñas (si quieres cambiar la dirección) */
+@media (max-width: 600px) {
+  .cart__payment {
+    flex-direction: column;  /* o “row” si prefieres que sigan lado a lado */
+    gap: 10px;
+    margin-bottom: 80px;
+  }
+  .cart__payment-option label {
+    padding: 10px 0;
+    font-size: 13px;
+  }
+  .cart__payment-option label:after {
+    right: 15px;
+  }
+  .cart__payment-option input {
+    right: 15px;
+  }
+}
 
 /* Para pantallas más pequeñas (móviles) */
 @media (max-width:1250px) {
@@ -637,13 +757,14 @@ body.open .lightbox {
   }
 
   .js-cart-counter {
-    display: none;
+    align-items: end;
+    display: inline-block;
   }
 
   .w3-bar-item {
-    margin: 0 10px;
-    font-size: 18px;
-    padding: 13px;
+    font-size: 16px;           /* fuente más pequeña en móvil */
+    margin: 5px 8px;           /* reduce espacios entre items */
+    padding: 8px 6px;          /* menos padding para que quepan más */
   }
 
   .Subtitle {
@@ -652,7 +773,12 @@ body.open .lightbox {
   }
 
   .w3-top {
-    justify-content: flex-start;
+    display: flex;
+    flex-wrap: wrap;           /* permite que los enlaces “bajen” de línea */
+    justify-content: center;   /* centrado horizontal */
+    overflow-x: visible;       /* ya no hay scroll lateral */
+    white-space: normal;       /* texto puede quebrarse */
+    padding: 0 10px;           /* pequeño padding lateral */
   }
 
   .js-toggle-cart {
@@ -661,6 +787,7 @@ body.open .lightbox {
 
   .shop__text {
     .button {
+      display: inline-flex;
       padding: 15px 10px 15px 20px;
     }
   }
