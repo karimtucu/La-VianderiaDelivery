@@ -58,18 +58,55 @@ function addProduct(e) {
   updateProductCounter();
   updateCartTotal(); // Actualizar el total
   $('.js-cart-empty').addClass('hide');
+  // ——— toast de agregado ———
+  Toastify({
+    text: `✅ ${productTitle} agregado al carrito`,
+    duration: 2000,
+    gravity: "bottom",
+    position: "center",
+    style: {
+      background: "#4caf50",
+      color: "#fff",
+      borderRadius: "4px",
+      fontSize: "14px",
+      padding: "10px 20px"
+    }
+  }).showToast();
 }
 
 // Eliminar un producto del carrito
 function removeProduct(e) {
   e.preventDefault();
-  $(this).closest('.js-cart-product').remove();
+
+  // 1) Capturar el título antes de eliminar el nodo
+  var $productItem = $(this).closest('.js-cart-product');
+  var productTitle = $productItem.find('.cart-product__title').text();
+
+  // 2) Eliminar el elemento del DOM
+  $productItem.remove();
+
+  // 3) Actualizar contador y total
   numberOfProducts--;
   if (numberOfProducts === 0) {
     $('.js-cart-empty').removeClass('hide');
   }
   updateProductCounter();
-  updateCartTotal(); // Actualizar el total
+  updateCartTotal();
+
+  // 4) Mostrar toast de eliminado
+  Toastify({
+    text: `🗑️ ${productTitle} eliminado del carrito`,
+    duration: 2000,
+    gravity: "bottom",
+    position: "center",
+    style: {
+      background: "#e53935",
+      color: "#fff",
+      borderRadius: "4px",
+      fontSize: "14px",
+      padding: "10px 20px"
+    }
+  }).showToast();
 }
 
 // Actualizar el contador de productos
@@ -129,6 +166,24 @@ function sendWhatsAppOrder() {
   // Calcular el total
   var total = parseFloat($('.js-cart-total').text()) || 0;
   productsMessage += `Total: S/. ${total.toFixed(2)}\n\n`;
+  
+  // **3) VALIDAR CARRITO VACÍO AQUI**
+  if (total <= 0) {
+    Toastify({
+      text: "⚠️ Tu carrito está vacío.",
+      duration: 2500,
+      gravity: "bottom",
+      position: "center",
+      style: {
+        background: "#e53935",
+        color: "#fff",
+        borderRadius: "4px",
+        fontSize: "14px",
+        padding: "10px 20px"
+      }
+    }).showToast();
+    return; // Salir si no hay productos en el carrito
+  }
 
   // Obtener la dirección y el método de pago seleccionados
   var userAddress = document.getElementById('address').value.trim();
@@ -136,14 +191,38 @@ function sendWhatsAppOrder() {
 
   // Validar la dirección
   if (!userAddress) {
-    alert('Por favor, ingresa tu ubicación.');
-    return;
+    Toastify({
+  text: "⚠️ Por favor, ingresa tu ubicación.",
+  duration: 2500,
+  gravity: "bottom",
+  position: "center",
+  style: {
+    background: "#e53935",  // fondo rojo claro para advertencia
+    color: "#fff",
+    borderRadius: "4px",
+    fontSize: "14px",
+    padding: "10px 20px"
+  }
+}).showToast();
+return;
   }
 
   // Validar método de pago
   if (!paymentInput) {
-    alert('Selecciona un método de pago: transferencia o efectivo.');
-    return;
+    Toastify({
+  text: "⚠️ Selecciona un método de pago: transferencia o efectivo.",
+  duration: 2500,
+  gravity: "bottom",
+  position: "center",
+  style: {
+    background: "#e53935",
+    color: "#fff",
+    borderRadius: "4px",
+    fontSize: "14px",
+    padding: "10px 20px"
+  }
+}).showToast();
+return;
   }
 
   var paymentMethod = paymentInput.value;
