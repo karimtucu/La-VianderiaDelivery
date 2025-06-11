@@ -63,7 +63,7 @@ function addProduct(e) {
     text: `✅ ${productTitle} agregado al carrito`,
     duration: 2000,
     gravity: "bottom",
-    position: "center",
+    position: "right",
     style: {
       background: "#4caf50",
       color: "#fff",
@@ -98,7 +98,7 @@ function removeProduct(e) {
     text: `🗑️ ${productTitle} eliminado del carrito`,
     duration: 2000,
     gravity: "bottom",
-    position: "center",
+    position: "right",
     style: {
       background: "#e53935",
       color: "#fff",
@@ -173,7 +173,7 @@ function sendWhatsAppOrder() {
       text: "⚠️ Tu carrito está vacío.",
       duration: 2500,
       gravity: "bottom",
-      position: "center",
+      position: "right",
       style: {
         background: "#e53935",
         color: "#fff",
@@ -195,7 +195,7 @@ function sendWhatsAppOrder() {
   text: "⚠️ Por favor, ingresa tu ubicación.",
   duration: 2500,
   gravity: "bottom",
-  position: "center",
+  position: "right",
   style: {
     background: "#e53935",  // fondo rojo claro para advertencia
     color: "#fff",
@@ -213,7 +213,7 @@ return;
   text: "⚠️ Selecciona un método de pago: transferencia o efectivo.",
   duration: 2500,
   gravity: "bottom",
-  position: "center",
+  position: "right",
   style: {
     background: "#e53935",
     color: "#fff",
@@ -238,7 +238,7 @@ return;
   productsMessage += "Confirmo que mi orden es correcta.";
 
   // Número de teléfono de destino (sin el símbolo +)
-  var phoneNumber = "543813422004";  // Código de país de Perú (51) + número de teléfono
+  var phoneNumber = "543813422004";  // Código de país de ARG (54) + número de teléfono
 
   // Detectamos el ancho de la pantalla para determinar si es móvil o escritorio
   var isMobile = window.innerWidth <= 768; // Este valor puede ajustarse según lo necesites (768px es un valor común para móvil)
